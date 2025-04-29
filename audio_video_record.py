@@ -151,7 +151,7 @@ chunk_dir = 'recordings'
 merged_output = 'final_output.mp4'
 file_format = '.mp4'
 chunk_duration = 10          # seconds
-max_chunks = 4               # Max chunks to keep
+max_chunks = 720               # Max chunks to keep
 fps = 30
 resolution = '640x480'
 
@@ -219,6 +219,15 @@ def start_segmented_recording():
         '-g', str(fps),        # <<< ADD THIS: keyframe every 1 second (30 frames)
         '-keyint_min', str(fps),  # <<< Also minimum keyframe distance
         '-sc_threshold', '0',     # <<< Disable scene-cut based keyframes (optional, makes cuts predictable)
+        
+        # Add drawtext filter
+        '-vf', (
+            "drawtext=fontfile=/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf:"
+            "text='%{localtime\\:%m-%d-%y %H\\\\\\:%M\\\\\\:%S}':"
+            "x=10:y=10:fontsize=16:fontcolor=white:"
+            "box=1:boxcolor=black@0.3:boxborderw=5"
+        ),
+
         '-c:a', 'aac',
         '-b:a', '128k',
         '-pix_fmt', 'yuv420p',
